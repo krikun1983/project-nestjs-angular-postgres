@@ -9,6 +9,16 @@
 		{
 			"name": "get User All",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJuYW1lIjoi0KHRgtCw0L3QuNGB0LvQsNCyIiwidXNlcm5hbWUiOiJrcmlrdW4iLCJlbWFpbCI6ImtyaWt1bkBtYWlsLnJ1Iiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTY4MTU1NjUzMCwiZXhwIjoxNjgxNTY2NTMwfQ.ClDzbtZUEleI8tlH_LyjJ8pWSbhbSrwkN-9XdXGmwM0",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -31,7 +41,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/users/1",
+					"raw": "http://localhost:3000/users/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -39,7 +49,7 @@
 					"port": "3000",
 					"path": [
 						"users",
-						"1"
+						"2"
 					]
 				}
 			},
@@ -108,14 +118,14 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/user/1",
+					"raw": "http://localhost:3000/users/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"user",
+						"users",
 						"1"
 					]
 				}
@@ -146,6 +156,36 @@
 					"path": [
 						"users",
 						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add role for users",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"role\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/2/role",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"2",
+						"role"
 					]
 				}
 			},
