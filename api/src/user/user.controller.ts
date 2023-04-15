@@ -1,16 +1,27 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 
 import { UserService } from './user.service';
-import { IUser } from './models/user.interface';
-import { Observable } from 'rxjs';
+import { IUser, UserRole } from './models/user.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import { hasRoles } from '../auth/decorator/role.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  createUser(@Body() user: IUser): Observable<IUser> {
-    return this.userService.createUser(user);
+  createUser(@Body() user: IUser): Observable<IUser | object> {
+    return this.userService.createUser(user).pipe(
+      map((user: IUser) => user),
+      catchError((err) => of({ error: err.message }))
+    );
+  }
+
+  @Post('login')
+  login(@Body() user: IUser): Observable<object> {
+    return this.userService.login(user).pipe(map((token: string) => ({ access_token: token })));
   }
 
   @Get(':id')
@@ -31,5 +42,12 @@ export class UserController {
   @Delete(':id')
   deleteOne(@Param('id') id: string): Observable<any> {
     return this.userService.deleteOne(Number(id));
+  }
+
+  @hasRoles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Put(':id/role')
+  updateRoleOfUser(@Param('id') id: string, @Body() user: IUser): Observable<IUser> {
+    return this.userService.updateRoleOfUser(Number(id), user);
   }
 }
