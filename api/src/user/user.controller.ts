@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 
 import { UserService } from './user.service';
 import { IUser, UserRole } from './models/user.interface';
@@ -6,6 +18,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { hasRoles } from '../auth/decorator/role.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { Pagination } from 'nestjs-typeorm-paginate';
 
 @Controller('users')
 export class UserController {
@@ -30,8 +43,13 @@ export class UserController {
   }
 
   @Get()
-  findUserAll(): Observable<IUser[]> {
-    return this.userService.findUserAll();
+  index(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10
+  ): Observable<Pagination<IUser>> {
+    limit = limit > 100 ? 100 : limit;
+
+    return this.userService.paginate({ page, limit, route: 'http://localhost:3000/users' });
   }
 
   @Put(':id')
