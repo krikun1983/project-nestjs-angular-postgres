@@ -11,14 +11,14 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { catchError, map, Observable, of } from 'rxjs';
+import { Pagination } from 'nestjs-typeorm-paginate';
 
 import { UserService } from './user.service';
 import { IUser, UserRole } from './models/user.interface';
-import { catchError, map, Observable, of } from 'rxjs';
 import { hasRoles } from '../auth/decorator/role.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
-import { Pagination } from 'nestjs-typeorm-paginate';
 
 @Controller('users')
 export class UserController {
