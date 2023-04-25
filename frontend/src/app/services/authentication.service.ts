@@ -2,8 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
 
-interface IToken {
+interface Token {
   access_token: string;
+}
+
+interface User {
+  email: string;
+  password: string;
+}
+
+interface FullUser extends User {
+  name: string;
+  username: string;
+  passwordConfirm: string;
 }
 
 @Injectable({
@@ -12,12 +23,21 @@ interface IToken {
 export class AuthenticationService {
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string) {
-    return this.http.post<IToken>('http://localhost:3000/api/users/login', { email, password }).pipe(
+  public login(user: User) {
+    return this.http.post<Token>('http://localhost:3000/api/users/login', { ...user }).pipe(
       map((token) => {
         console.log(token);
         localStorage.setItem('blog_token', token.access_token);
         return token;
+      })
+    );
+  }
+
+  public register(user: FullUser) {
+    return this.http.post<FullUser>('http://localhost:3000/api/users', user).pipe(
+      map((fullUser) => {
+        console.log(fullUser);
+        return fullUser;
       })
     );
   }
