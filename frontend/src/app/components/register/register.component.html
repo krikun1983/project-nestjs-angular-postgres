@@ -69,10 +69,10 @@
         placeholder="Confirm your password"
       />
       <mat-hint
-        *ngIf="registerForm.get('passwordConfirm')?.errors"
+        *ngIf="registerForm?.hasError('passwordsNoMatching')"
         align="end"
       >
-        PasswordConfirm is required
+        Passwords not matching
       </mat-hint>
     </mat-form-field>
 
@@ -85,3 +85,10 @@
     </button>
   </div>
 </form>
+
+<h3 *ngIf="registerForm.invalid">Form contains following errors</h3>
+<small *ngIf="registerForm.get('password')?.hasError('passwordInvalid')">
+  Password is not containing a number
+</small>
+
+<small *ngIf="registerForm?.hasError('passwordsNoMatching')">Passwords not matching</small>
