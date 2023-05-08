@@ -1,1 +1,94 @@
-<p>register works!</p>
+<h1>Register Page</h1>
+<form
+  [formGroup]="registerForm"
+  (ngSubmit)="onSubmit()"
+>
+  <div class="container">
+    <mat-form-field>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="Full name"
+      />
+      <mat-hint
+        *ngIf="registerForm.get('name')?.errors"
+        align="end"
+      >
+        Name is required
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        formControlName="username"
+        placeholder="Your username"
+      />
+      <mat-hint
+        *ngIf="registerForm.get('username')?.errors"
+        align="end"
+      >
+        Username is required
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        formControlName="email"
+        placeholder="Your email"
+      />
+      <mat-hint
+        *ngIf="registerForm.get('email')?.errors"
+        align="end"
+      >
+        Email is required
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        formControlName="password"
+        type="password"
+        placeholder="Your password"
+      />
+      <mat-hint
+        *ngIf="registerForm.get('password')?.errors"
+        align="end"
+      >
+        Password is required
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        formControlName="passwordConfirm"
+        type="password"
+        placeholder="Confirm your password"
+      />
+      <mat-hint
+        *ngIf="registerForm?.hasError('passwordsNoMatching')"
+        align="end"
+      >
+        Passwords not matching
+      </mat-hint>
+    </mat-form-field>
+
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="registerForm.invalid"
+    >
+      Register
+    </button>
+  </div>
+</form>
+
+<h3 *ngIf="registerForm.invalid">Form contains following errors</h3>
+<small *ngIf="registerForm.get('password')?.hasError('passwordInvalid')">
+  Password is not containing a number
+</small>
+
+<small *ngIf="registerForm?.hasError('passwordsNoMatching')">Passwords not matching</small>
