@@ -6,15 +6,16 @@ interface Token {
   access_token: string;
 }
 
-interface User {
+export interface User {
   email: string;
   password: string;
 }
 
-interface FullUser extends User {
+export interface FullUser extends User {
   name: string;
   username: string;
   passwordConfirm: string;
+  role?: string;
 }
 
 @Injectable({
